@@ -79,3 +79,38 @@ for r in rewards_per_thousand_episodes:
 # print q_table
 print("\n\n*****Q-table*****\n\n")
 print(q_table)
+
+
+# playing the game
+import os
+os.environ["SDL_VIDEODRIVER"] = "dummy"
+
+for episode in range(3):
+  state = env.reset()
+  done = False
+  print("--EPISODE:", episode+1,"--\n")
+  time.sleep(1)
+
+  for step in range(max_steps_per_episode):
+    clear_output(wait=True)
+    env.render()
+    time.sleep(0.3)
+
+    action=np.argmax(q_table[state,:])
+    new_state, reward, done, info = env.step(action)
+
+    if done:
+      clear_output(wait=True)
+      env.render()
+      if reward == 1:
+        print("You reached the goal")
+        time.sleep(3)
+      else:
+        print("you fell through hole")
+        time.sleep(3)
+      clear_output(wait=True)
+      break
+
+    state=new_state
+
+env.close()
